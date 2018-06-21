@@ -153,6 +153,10 @@ void hduel(int k)
         scanf(" %i",&armor2);
         printf("\nis this unit a Redanian Elite? yes=1 , no=other ,   #= ");
         scanf("%d",&d3);
+        if(armor2==0)
+                  {
+                      d3=0;
+                  }
         hp2=b+armor2;B=b;AR2=armor2;i=0;
         printf("\ndueling Redanian Elite?( if yes it only shows redanian elites values ) yes=1 , no=other ,   #= ");
         scanf(" %i",&d4);
