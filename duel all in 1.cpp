@@ -21,6 +21,10 @@ void ds(int q)
                   scanf(" %i",&d2);
                   printf("\nis this unit a Redanian Elite? yes=1 , no=other ,   #= ");
                   scanf("%d",&d3);
+                  if(armor1==0)
+                  {
+                      d3=0;
+                  }    
               }
 
             printf("\ndueling Redanian Elite? yes=1 , no=other ,   #= ");
