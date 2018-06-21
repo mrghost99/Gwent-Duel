@@ -40,6 +40,10 @@ void ds(int q)
           scanf(" %i",&b);
           printf("\ngive armor= ");
           scanf(" %d",&armor2);
+          if(armor2==0)
+                  {
+                      d4=0;
+                  }
           printf("\n RESULTS: \n");
           hp1=a+armor1; // defiening units health and saving their powers to calculate results
           hp2=b+armor2;
