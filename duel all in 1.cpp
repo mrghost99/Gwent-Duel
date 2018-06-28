@@ -138,7 +138,7 @@ void ds(int q)
 }
 void my_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int A,int B,int INvalue,int INv,int c,int INar2,int AR1,int j,int w,int d2,int d,int d3,int red,int str,int sb,int sabbath,int cond,int v1[150000],int v2[150000],int v3[150000],int cancel_result,int target_m)
 {
-    int max_armor=0;int max_power=0;
+    int max_power_array[15000];int a_last_value=0;int b_last_value=0;
     // changing power while saving B's power //
     for(i=1;i<2*d*A;i++)
               {
@@ -147,8 +147,8 @@ void my_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int A
                   // changing armor and resetting powers //
                   for(g=0;g<=10;g++)
                   {
-
                         // resetting all necessary values
+                        a_last_value=a;
                         b=B;c=0;a=A;armor1=AR1;hp1=a+armor1;
                         hp2=b+g;
                         armor2=g;sabbath=0;cond=1;
@@ -232,21 +232,31 @@ void my_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int A
                                     v3[j]=INv;
                                     v2[j]=g;
                                     v1[j]=i;
-                                    if(b==0 && v1[j]>=max_power)
+                                    if(g!=0) // equation is wrong if g!=0 (B[j-1}!=B[j]
+                                    {
+                                        b_last_value=v3[j]-v3[j-1]+b+a_last_value-a;
+                                    }
+                                    else
+                                    {
+                                        b_last_value=v3[j]-v3[j-1]+b+a_last_value-a-1;
+                                    }
+                                    if(a==0 && b_last_value==0) // it takes the highest beatable unit with X power
                                     {
                                         if(d3==1)
                                         {
-                                            if(v2[j]!=0)
+                                            if(g!=0)
                                             {
-                                                max_power=v1[j];
-                                                max_armor=v2[j];
+                                                max_power_array[j]=1;
                                             }
                                         }
                                         else
                                         {
-                                            max_power=v1[j];
-                                            max_armor=v2[j];
+                                            max_power_array[j]=1;
                                         }
+                                    }
+                                    else
+                                    {
+                                        max_power_array[j]=0;
                                     }
                                     j=j+1;
                                     if(INv>=INvalue)
@@ -381,9 +391,6 @@ void my_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int A
                             printf("\n\n");
                         }
                     }
-
-
-
                 if(cancel_result==1)
                 {
                     bool there_is_a_unit=false;
@@ -410,7 +417,25 @@ void my_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int A
                     }
                 }
             }
-            printf("The biggest unit it can beat is : ( %d , %d )",max_power,max_armor);
+            printf("The biggest units it can beat are :");
+            for(w=0;w<j+1;w++)
+            {
+                if(max_power_array[w]!=0)
+                {
+                    if(d3==1)
+                    {
+                        if(v2[w-1]>=1)
+                        {
+                            printf("\n( %d , %d )",v1[w-1],v2[w-1]);
+                        }
+                    }
+                    else
+                    {
+                        printf("\n( %d , %d )",v1[w-1],v2[w-1]);
+                    }
+
+                }
+            }
 }
 void his_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int A,int B,int INvalue,int INv,int c,int INar2,int AR1,int s,int AR2,int w,int d3,int d4,int red2,int red1,int cond1,int cond2,int v1[150000],int v2[150000],int v4[150000],int cancel_result,int target_h)
 {
@@ -694,12 +719,12 @@ void hduel(int k)
 void mduel(int k)
 {
     // reading //
-               int a,b,armor1,armor2,i,g,hp1,hp2,A,B,INvalue,INv,c,INar2;int AR1=0;int s=0;int w=0;int d2=0;int d=1;int d3=0;int red=0;int target_m=0;int cancel_result=0;
-                INvalue=0;
-                INar2=0;
-                int str=5; // sabbath
-                c=0;
-                int sb=0;int sabbath=0;int cond=1;
+              int a,b,armor1,armor2,i,g,hp1,hp2,A,B,INvalue,INv,c,INar2;int AR1=0;int s=0;int w=0;int d2=0;int d=1;int d3=0;int red=0;int target_m=0;int cancel_result=0;
+              INvalue=0;
+              INar2=0;
+              int str=5; // sabbath
+              c=0;
+              int sb=0;int sabbath=0;int cond=1;
               printf("\ngive the FIRST attacking unit details \n");
               printf("give power= ");
               scanf(" %i",&a);
