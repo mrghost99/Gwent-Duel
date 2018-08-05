@@ -138,7 +138,7 @@ void ds(int q)
 }
 void my_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int A,int B,int INvalue,int INv,int c,int INar2,int AR1,int j,int w,int d2,int d,int d3,int red,int str,int sb,int sabbath,int cond,int v1[150000],int v2[150000],int v3[150000],int cancel_result,int target_m)
 {
-    int max_power_array[15000];int a_last_value=0;int b_last_value=0;
+    int max_power_array[60000];int a_last_value=0;int b_last_value=0;int last_sabbath=0;
     // changing power while saving B's power //
     for(i=1;i<2*d*A;i++)
               {
@@ -148,7 +148,7 @@ void my_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int A
                   for(g=0;g<=10;g++)
                   {
                         // resetting all necessary values
-                        a_last_value=a;
+                        a_last_value=a;last_sabbath=sabbath;
                         b=B;c=0;a=A;armor1=AR1;hp1=a+armor1;
                         hp2=b+g;
                         armor2=g;sabbath=0;cond=1;
@@ -205,7 +205,7 @@ void my_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int A
                                  if(b<=0)
                                      {
                                          b=0;
-                                         if(a<str) // sabbath
+                                         if(a<str && sb==1) // sabbath
                                          {
                                             sabbath=1;
                                              if (a<str-1)
@@ -234,7 +234,7 @@ void my_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int A
                                     v1[j]=i;
                                     if(g!=0) // equation is wrong if g!=0 (B[j-1}!=B[j]
                                     {
-                                        b_last_value=v3[j]-v3[j-1]+b+a_last_value-a;
+                                        b_last_value=v3[j]-v3[j-1]+b+a_last_value-a+last_sabbath;
                                     }
                                     else
                                     {
@@ -391,8 +391,30 @@ void my_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int A
                             printf("\n\n");
                         }
                     }
-                if(cancel_result==1)
+
+
+                printf("The biggest units it can beat are :");
+                for(w=0;w<j+1;w++)
                 {
+                    if(max_power_array[w]!=0)
+                    {
+                        if(d3==1)
+                        {
+                            if(v2[w-1]>=1)
+                            {
+                                printf("\n( %d , %d ) for %d PTS",v1[w-1],v2[w-1],v3[w-1]);
+                            }
+                        }
+                        else
+                        {
+                            printf("\n( %d , %d ) for %d PTS",v1[w-1],v2[w-1],v3[w-1]);
+                        }
+
+                    }
+                }
+            }
+            if(cancel_result==1)
+            {
                     bool there_is_a_unit=false;
                     printf("\nhere are the units to duel for %d PTS : ",target_m);
                     for(w=0;w<j+1;w++)
@@ -415,29 +437,11 @@ void my_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int A
                     {
                         printf("\n Can't be done :(");
                     }
-                }
             }
-            printf("The biggest units it can beat are :");
-            for(w=0;w<j+1;w++)
-            {
-                if(max_power_array[w]!=0)
-                {
-                    if(d3==1)
-                    {
-                        if(v2[w-1]>=1)
-                        {
-                            printf("\n( %d , %d )",v1[w-1],v2[w-1]);
-                        }
-                    }
-                    else
-                    {
-                        printf("\n( %d , %d )",v1[w-1],v2[w-1]);
-                    }
 
-                }
-            }
+
 }
-void his_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int A,int B,int INvalue,int INv,int c,int INar2,int AR1,int s,int AR2,int w,int d3,int d4,int red2,int red1,int cond1,int cond2,int v1[150000],int v2[150000],int v4[150000],int cancel_result,int target_h)
+void his_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int A,int B,int INvalue,int INv,int c,int INar2,int AR1,int s,int AR2,int w,int d3,int d4,int red2,int red1,int cond1,int cond2,int v1[150000],int v2[150000],int v4[150000],int cancel_result,int target_h,int who_kills_cond)
 {
     // changing power and saving a's power for reset inside second loop //
         for(i=1;i<2*B;i++)
@@ -520,10 +524,32 @@ void his_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int 
                                 // saving duel results //
                                 if(a==0 || b==0)
                                 {
-                                    INv=A+B-a-b;
-                                    v4[s]=INv;
-                                    v2[s]=g;
-                                    v1[s]=i;
+                                    if(who_kills_cond==1)
+                                    {
+                                        if(b==0)
+                                        {
+                                            INv=1;
+                                            v4[s]=INv;
+                                            v2[s]=g;
+                                            v1[s]=i;
+                                        }
+                                        else
+                                        {
+                                            INv=0;
+                                            v4[s]=INv;
+                                            v2[s]=g;
+                                            v1[s]=i;
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        INv=A+B-a-b;
+                                        v4[s]=INv;
+                                        v2[s]=g;
+                                        v1[s]=i;
+                                    }
+
                                     s=s+1;
                                     if(INv>=INvalue)
                                       {
@@ -536,7 +562,7 @@ void his_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int 
 
                 }
                 // giving results //
-                if(cancel_result!=1)
+                if(cancel_result!=1 && who_kills_cond!=1)
                 {
                     int ign=0; // whether to ignore armored units
                     if(d4!=1)
@@ -656,7 +682,7 @@ void his_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int 
                         }
                     }
                 }
-                if(cancel_result==1)
+                if(cancel_result==1 && who_kills_cond!=1)
                 {
                     bool there_is_a_unit=false;
                     printf("\nhere are the units to duel for %d PTS : ",target_h);
@@ -681,6 +707,24 @@ void his_duel(int a,int b,int armor1,int armor2,int i,int g,int hp1,int hp2,int 
                         printf("\n Can't be done :(");
                     }
                 }
+                if(who_kills_cond==1)
+                {
+                    int o2=0;
+                    printf("This unit dies to :\n");
+                    for(w=0;w<=s+1;w++)
+                    {
+                        if(v4[w]==1 && v1[w]<=B)
+                        {
+                            o2+=1;
+                            if(o2%6==0 && o2!=0) // formatting : return to line every 5 cases
+                            {
+                                printf("\n");
+                                o2+=1; // so the mod only goes to a new line every 5 cases
+                            }
+                            printf(" ( %d , %d )",v1[w],v2[w]);
+                        }
+                    }
+                }
 }
 void hduel(int k)
 {
@@ -689,7 +733,7 @@ void hduel(int k)
         INvalue=0;
         INar2=0;
         c=0;
-        int AR2=0;int target_h=0;int cancel_result=0;
+        int AR2=0;int target_h=0;int cancel_result=0;int who_kills_cond=0;
         printf("\ngive the *SECOND* attacking unit details \n");
         printf("\ngive power= ");
         scanf(" %i",&b);
@@ -713,7 +757,7 @@ void hduel(int k)
             red1=5;
         }
         int v1[150000];int v2[150000];int v4[150000];
-        his_duel(a,b,armor1,armor2,i,g,hp1,hp2,A,B,INvalue,INv,c,INar2,AR1,s,AR2,w,d3,d4,red2,red1,cond1,cond2,v1,v2,v4,cancel_result,target_h);
+        his_duel(a,b,armor1,armor2,i,g,hp1,hp2,A,B,INvalue,INv,c,INar2,AR1,s,AR2,w,d3,d4,red2,red1,cond1,cond2,v1,v2,v4,cancel_result,target_h,who_kills_cond);
 }
 
 void mduel(int k)
@@ -722,7 +766,7 @@ void mduel(int k)
               int a,b,armor1,armor2,i,g,hp1,hp2,A,B,INvalue,INv,c,INar2;int AR1=0;int s=0;int w=0;int d2=0;int d=1;int d3=0;int red=0;int target_m=0;int cancel_result=0;
               INvalue=0;
               INar2=0;
-              int str=5; // sabbath
+              int str=-50; // sabbath
               c=0;
               int sb=0;int sabbath=0;int cond=1;
               printf("\ngive the FIRST attacking unit details \n");
@@ -750,7 +794,7 @@ void mduel(int k)
                }
               if(d2==1)
               {
-                  d=2;
+                  d=2; //double dammage
               }
               hp1=a+armor1;A=a;AR1=armor1;i=0; // defining powers and saving power for future reset
               int v1[150000];int v2[150000];int v3[150000];
@@ -809,7 +853,7 @@ void can_it_be_done(int k)
     if(side==2)
     {
     // reading //
-        int cancel_result=1;int target_h=0;
+        int cancel_result=1;int target_h=0;int who_kills_cond=0;
         printf("\nwhat's the target PTS you're looking for? #=");
         scanf("%d",&target_h);
         // hduel ()
@@ -841,25 +885,50 @@ void can_it_be_done(int k)
             red1=5;
         }
         int v1[150000];int v2[150000];int v4[150000];
-        his_duel(a,b,armor1,armor2,i,g,hp1,hp2,A,B,INvalue,INv,c,INar2,AR1,s,AR2,w,d3,d4,red2,red1,cond1,cond2,v1,v2,v4,cancel_result,target_h);
+        his_duel(a,b,armor1,armor2,i,g,hp1,hp2,A,B,INvalue,INv,c,INar2,AR1,s,AR2,w,d3,d4,red2,red1,cond1,cond2,v1,v2,v4,cancel_result,target_h,who_kills_cond);
     }
+}
+void kills_it(int k)
+{
+        int a,b,armor1,armor2,i,g,hp1,hp2,A,B,INvalue,INv,OUTv,c,INar2,OUTar2;int AR1=0;int s=0; int j=0;int w=0;int red1,red2,cond1,cond2,d3,d4,D3,D4=0;
+        INvalue=0;
+        INar2=0;
+        c=0;
+        int AR2=0;int target_h=0;int cancel_result=0;int who_kills_cond=1;
+        printf("\ngive the *SECOND* attacking unit details \n");
+        printf("\ngive power= ");
+        scanf(" %i",&b);
+        printf("\n\ngive armor= ");
+        scanf(" %i",&armor2);
+        printf("\nis this unit a Redanian Elite? yes=1 , no=other ,   #= ");
+        scanf("%d",&d3);
+        if(armor2==0)
+        {
+            d3=0;
+        }
+        hp2=b+armor2;B=b;AR2=armor2;i=0;
+        if(d3==1) // B
+        {
+            red2=5;
+        }
+        int v1[150000];int v2[150000];int v4[150000];
+        his_duel(a,b,armor1,armor2,i,g,hp1,hp2,A,B,INvalue,INv,c,INar2,AR1,s,AR2,w,d3,d4,red2,red1,cond1,cond2,v1,v2,v4,cancel_result,target_h,who_kills_cond);
 }
 int main()
 {
         int y=1;int K=0;int L=0;int Q=0;
         while(y==1)
         {
-            printf("calculate duel ( 1 ) or search for best units to duel? ( 2 ) , exit = other, #= ");
+            printf("calculate duel ( 1 ) or search for best units to duel? ( 2 ) or know who kills your unit (3) , exit = other, #= ");
             scanf("%d",&Q);
             L=Q;
-            while(Q==1 || L==1) // "L" is to eliminate ambiguities between the two modes
+            while(Q==1) // "L" is to eliminate ambiguities between the two modes
                 {
                     ds(L);
                     printf("\n+++++++++++++++++++++++++++++++\n");
                     printf("\n again? yes=1 no=other, #=");
-                    scanf("%d",&L);
+                    scanf("%d",&Q);
                     printf("\n+++++++++++++++++++++++++++++++\n");
-                    Q=0;
                 }
             while(Q==2)
                 {
@@ -884,6 +953,14 @@ int main()
                     }
                     printf("\n+++++++++++++++++++++++++++++++\n");
                     printf("\n again? yes=2 no=other, #=");
+                    scanf("%d",&Q);
+                    printf("\n+++++++++++++++++++++++++++++++\n");
+                }
+            while(Q==3)
+                {
+                    kills_it(Q);
+                    printf("\n+++++++++++++++++++++++++++++++\n");
+                    printf("\n again? yes=3 no=other, #=");
                     scanf("%d",&Q);
                     printf("\n+++++++++++++++++++++++++++++++\n");
                 }
